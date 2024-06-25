@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Recommender</title>
+</head>
+<body>
+    <h1>Course Recommender</h1>
+    
+    <form id="courseForm">
+        <label for="courseTitle">Enter Course Title:</label>
+        <input type="text" id="courseTitle" name="course_title" required>
+        <br><br>
+        <button type="button" onclick="getRecommendations()">Get Recommendations</button>
+    </form>
+
+    <h2>Recommendations:</h2>
+    <div id="recommendations"></div>
+
+    <script>
+        function getRecommendations() {
+            var courseTitle = document.getElementById("courseTitle").value;
+            
+            fetch('http://127.0.0.1:5000/recommend', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ course_title: courseTitle })
+            })
+            .then(response => response.json())
+            .then(data => {
+                var recommendationsDiv = document.getElementById("recommendations");
+                recommendationsDiv.innerHTML = ''; // Clear previous recommendations
+                data.forEach(function(course) {
+                    var courseLink = document.createElement("a");
+                    courseLink.href = course.url;
+                    courseLink.textContent = course.course_title;
+                    var courseInfo = document.createElement("p");
+                    courseInfo.textContent = `Price: ${course.price}, Subscribers: ${course.num_subscribers}`;
+                    recommendationsDiv.appendChild(courseLink);
+                    recommendationsDiv.appendChild(courseInfo);
+                    recommendationsDiv.appendChild(document.createElement("br"));
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>

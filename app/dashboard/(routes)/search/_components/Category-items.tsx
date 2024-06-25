@@ -1,3 +1,4 @@
+// CategoryItem.tsx
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -34,6 +35,7 @@ const CategoryItem = ({ label, value, icon: Icon }: CategoryItemProps) => {
 
     router.push(url);
   };
+
   return (
     <button
       onClick={onClick}
@@ -44,7 +46,6 @@ const CategoryItem = ({ label, value, icon: Icon }: CategoryItemProps) => {
       )}
     >
       {Icon && <Icon size={20} />}
-
       <div className="truncate">{label}</div>
     </button>
   );
